@@ -6,10 +6,12 @@ from core.schemas import ApplicationCreate
 
 class ApplicationRepository:
     @staticmethod
-    async def create(db: AsyncSession, application_data: ApplicationCreate) -> Application:
+    async def create(
+        db: AsyncSession, application_data: ApplicationCreate
+    ) -> Application:
         new_application = Application(
             user_name=application_data.user_name,
-            description=application_data.description
+            description=application_data.description,
         )
         db.add(new_application)
         await db.commit()
@@ -17,7 +19,9 @@ class ApplicationRepository:
         return new_application
 
     @staticmethod
-    async def list(db: AsyncSession, user_name: str = None, offset: int = 0, limit: int = 10):
+    async def list(
+        db: AsyncSession, user_name: str = None, offset: int = 0, limit: int = 10
+    ):
         query = select(Application)
         if user_name:
             query = query.filter(Application.user_name == user_name)

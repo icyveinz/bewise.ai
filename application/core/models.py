@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from core.database import Base
 
+
 class Application(Base):
     __tablename__ = "applications"
 
