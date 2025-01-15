@@ -26,22 +26,23 @@ services:
 
   kafka:
     image: bitnami/kafka:latest
+    container_name: kafka
     environment:
       KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CFG_LISTENERS: PLAINTEXT://:9092
       KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    depends_on:
-      - zookeeper
     networks:
       - combined-network
 
   zookeeper:
     image: bitnami/zookeeper:latest
     container_name: zookeeper
-    depends_on:
-      - kafka
+    environment:
+    - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - combined-network
+    depends_on:
+      - kafka
 
   application:
     build: ./application
@@ -49,6 +50,8 @@ services:
     container_name: application
     depends_on:
       - db
+      - kafka
+      - zookeeper
     networks:
       - combined-network
 
