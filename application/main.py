@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from database import init_db
 from routers import applications
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -16,9 +17,11 @@ async def lifespan(app: FastAPI):
     finally:
         print("Shutting down: Perform cleanup if necessary")
 
+
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(applications.router)
+
 
 @app.get("/")
 async def root():

@@ -8,9 +8,11 @@ from schemas import ApplicationResponse, ApplicationCreate
 
 router = APIRouter(prefix="/applications", tags=["Applications"])
 
+
 async def get_db():
     async with SessionLocal() as session:
         yield session
+
 
 @router.post("/", response_model=ApplicationResponse)
 async def create_application(
@@ -25,17 +27,24 @@ async def create_application(
         await db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
 
-    await send_to_kafka("applications", {
-        "id": new_application.id,
-        "user_name": new_application.user_name,
-        "description": new_application.description,
-        "created_at": new_application.created_at.isoformat(),
-    })
+    await send_to_kafka(
+        "applications",
+        {
+            "id": new_application.id,
+            "user_name": new_application.user_name,
+            "description": new_application.description,
+            "created_at": new_application.created_at.isoformat(),
+        },
+    )
     return new_application
+
 
 @router.get("/", response_model=list[ApplicationResponse])
 async def list_applications(
-    user_name: str = None, page: int = 1, size: int = 10, db: AsyncSession = Depends(get_db)
+    user_name: str = None,
+    page: int = 1,
+    size: int = 10,
+    db: AsyncSession = Depends(get_db),
 ):
     query = select(Application)
     if user_name:

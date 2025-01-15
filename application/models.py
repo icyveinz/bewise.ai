@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, func
 
 Base = declarative_base()
 
+
 class Application(Base):
     __tablename__ = "applications"
 
