@@ -7,8 +7,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-      - application
+      - kafka
     networks:
       - combined-network
 
@@ -31,6 +30,8 @@ services:
       KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CFG_LISTENERS: PLAINTEXT://:9092
       KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    depends_on:
+      - zookeeper
     networks:
       - combined-network
 
@@ -42,7 +43,7 @@ services:
     networks:
       - combined-network
     depends_on:
-      - kafka
+      - application
 
   application:
     build: ./application
@@ -50,8 +51,6 @@ services:
     container_name: application
     depends_on:
       - db
-      - kafka
-      - zookeeper
     networks:
       - combined-network
 
