@@ -104,6 +104,7 @@ ENV PYTHONPATH=/application
 
 # Run the wait-for-db.sh script and then the application
 ENTRYPOINT ["/application/wait-for-db.sh", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+```
 
 ### `main.py`
 
